@@ -1,3 +1,5 @@
+Depending on how do you want to install `xgboost`, copy option one or two to the `xgboost-example/Dockerfile`. By default, it installs it through conda.
+
 # 1. Docker Image to Install `XGBoost` from source 
 
 ```dockerfile
