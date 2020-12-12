@@ -1,0 +1,60 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: Docker Registry
+
+Parameters:
+  Stage:
+    Type: String
+    Default: 'dev'
+    AllowedValues:
+    - dev 
+    - stage 
+    - prod
+  Project: 
+    Type: String
+    Default: 'docker-registry-example'
+  User:
+    Type: String
+
+Resources:
+  ImageRepository: 
+    Type: AWS::ECR::Repository
+    Properties: 
+      RepositoryName: !Sub '${Project}-ecr-registry-${Stage}'
+      RepositoryPolicyText: 
+        Version: "2012-10-17"
+        Statement: 
+          - 
+            Sid: AllowPushPull
+            Effect: Allow
+            Principal: 
+              AWS: 
+                - !Sub "arn:aws:iam::${AWS::AccountId}:user/${User}"
+            Action: 
+              - "ecr:GetDownloadUrlForLayer"
+              - "ecr:BatchGetImage"
+              - "ecr:BatchCheckLayerAvailability"
+              - "ecr:PutImage"
+              - "ecr:InitiateLayerUpload"
+              - "ecr:UploadLayerPart"
+              - "ecr:CompleteLayerUpload"
+      ImageTagMutability: MUTABLE
+  
+  LambdaDockerBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub "${Project}-${Stage}-${AWS::AccountId}"
+      Tags: 
+        - Key: "stage"
+          Value: !Ref Stage
+        - Key: "project"
+          Value: !Ref Project
+
+
+Outputs:
+  RepositoryName:
+    Description: 'Ecr Registry name'
+    Value: !Ref ImageRepository
+  BucketName:
+    Description: 'Bucket to store artifacts'
+    Value: !Ref LambdaDockerBucket

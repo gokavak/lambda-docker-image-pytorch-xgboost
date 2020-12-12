@@ -1,0 +1,51 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: lambda-custom-docker-image
+
+Parameters:
+  Version:
+    Type: String
+    Default: 'v1'
+  Stage:
+    Type: String
+    Default: 'dev'
+    AllowedValues:
+    - dev 
+    - stage 
+    - prod
+  Project: 
+    Type: String
+    Default: 'docker-image-test'
+  Repository:
+    Type: String
+    Default: 'ecr-repository'
+
+
+Globals:
+  Function:
+    Timeout: 180
+    MemorySize: 2048
+
+Resources:
+  MyDockerLambda:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub '${Project}-${Stage}'
+      ImageUri: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Repository}:latest'
+      PackageType: Image
+      Events:
+        HelloWorld:
+          Type: Api
+          Properties:
+            Path: /myexample # Replace this for most descriptive path
+            Method: post
+    Tags: 
+      version: !Ref Version
+      stage: !Ref Stage
+      project: !Ref Project 
+
+
+Outputs:
+  MyCustomDockerApi:
+    Description: 'API Gateway Prod endpoint URL for My Custom Docker function'
+    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/myexample/'
