@@ -24,6 +24,14 @@ You'll need to export the following environment variable
 
 * `TEMPLATE_REGISTRY` (the stack's name of your registry).
 
+* `TEMPLATE_LAMBDA` (the stack's name of your lambda).
+
+* `PREFIX_LAMBDA` (s3 bucket key to upload stack artifacts).
+
+* `CAPABILITIES` (Capability type to create AWS stack, run `sam deploy --help` for more info).
+
+
+
 Once ready, you can run `bash pipeline.sh -s <stage> -r` to create the ECR Registry and an S3 bucket. Or you can move on to the next step and wait to execute the bash pipeline with all the steps. The `<stage>` parameter refers to the stage of your development. Possible values can be:
 - dev
 - stage
