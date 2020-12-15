@@ -16,9 +16,9 @@ Parameters:
   Project: 
     Type: String
     Default: 'docker-image-test'
-  Repository:
+  DockerPath:
     Type: String
-    Default: 'ecr-repository'
+    Default: './pytorch-example'
 
 
 Globals:
@@ -31,7 +31,6 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       FunctionName: !Sub '${Project}-${Stage}'
-      ImageUri: !Sub '${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${Repository}:latest'
       PackageType: Image
       Events:
         HelloWorld:
@@ -39,6 +38,10 @@ Resources:
           Properties:
             Path: /myexample # Replace this for most descriptive path
             Method: post
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: !Sub '{DockerPath}'
+      DockerTag: 'latest'
     Tags: 
       version: !Ref Version
       stage: !Ref Stage
@@ -47,5 +50,5 @@ Resources:
 
 Outputs:
   MyCustomDockerApi:
-    Description: 'API Gateway Prod endpoint URL for My Custom Docker function'
-    Value: !Sub 'https://${ServerlessRestApi}.execute-api.${AWS::Region}.amazonaws.com/Prod/myexample/'
+    Description: 'API Gateway Prod endpoint URL for My Docker Lambda function'
+    Value: !Sub 'https://${MyDockerLambda}.execute-api.${AWS::Region}.amazonaws.com/Prod/myexample/'
