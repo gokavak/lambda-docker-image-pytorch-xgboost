@@ -71,7 +71,7 @@ The pretrained model ([Mobilenet V2](https://pytorch.org/hub/pytorch_vision_mobi
 
 #### 2.C The `deployment` step
 
-Run the `push` step as follows
+Run the `deploy` step as follows
 
 ```shell
 bash pipeline.sh -s <stage> -d <path>

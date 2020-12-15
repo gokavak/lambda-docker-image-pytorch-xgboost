@@ -13,7 +13,7 @@ region=${region:-us-west-2} # region defaults to us-west-2 if not defined
 DOCKER_REGISTRY="${account}.dkr.ecr.${region}.amazonaws.com"
 
 
-while getopts ":s:rd" OPTION
+while getopts ":s::rd" OPTION
 do
 	case $OPTION in
         s)
@@ -37,7 +37,7 @@ do
             sam deploy --stack-name ${TEMPLATE_LAMBDA} --capabilities "CAPABILITY_NAMED_IAM" --parameter-overrides Project="${TEMPLATE_LAMBDA}" Stage=${stage} DockerPath=${path} --s3-bucket ${BUCKET//\"} --s3-prefix ${PREFIX_LAMBDA} --region "${region}" --image-repository "${DOCKER_REGISTRY}/${APP_NAME//\"}" --force-upload --no-confirm-changeset
             ;;
         \?)
-            echo "Usage: pipeline.sh [-s] <stage> [-r] [-p] <path> [-d]"
+            echo "Usage: pipeline.sh [-s] <stage> [-r] [-d] <path>"
             exit 1
             ;;
 	esac
