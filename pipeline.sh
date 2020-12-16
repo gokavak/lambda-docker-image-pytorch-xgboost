@@ -1,10 +1,10 @@
 #!/bin/bash
 
 # Remember to export the following ENV variables:
-export CAPABILITIES="CAPABILITY_NAMED_IAM"
-export PREFIX_LAMBDA="sam_templates/pytorch-lambda-l"
-export TEMPLATE_LAMBDA="pytorch-lambda-l"
-export TEMPLATE_REGISTRY="pytorch-example-l"
+# export CAPABILITIES="CAPABILITY_NAMED_IAM"
+# export PREFIX_LAMBDA="sam_templates/pytorch-lambda-l"
+# export TEMPLATE_LAMBDA="pytorch-lambda-l"
+# export TEMPLATE_REGISTRY="pytorch-example-l"
 
 account=$(aws sts get-caller-identity --query Account --output text)
 user=$(aws iam get-user --query User.UserName --output text)
