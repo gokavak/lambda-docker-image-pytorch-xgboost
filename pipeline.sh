@@ -32,9 +32,9 @@ do
             echo "Retrieve Bucket Name"
             export BUCKET=$(aws cloudformation --region "${region}" describe-stacks --stack-name "$TEMPLATE_REGISTRY" --query "Stacks[0].Outputs[0].OutputValue")
             echo "Building template"
-            sam build -t template.yaml
+            sam build -t template.yaml --parameter-overrides DockerPath=${path}
             echo "Deploying template"
-            sam deploy --stack-name ${TEMPLATE_LAMBDA} --capabilities "CAPABILITY_NAMED_IAM" --parameter-overrides Project="${TEMPLATE_LAMBDA}" Stage=${stage} DockerPath=${path} --s3-bucket ${BUCKET//\"} --s3-prefix ${PREFIX_LAMBDA} --region "${region}" --image-repository "${DOCKER_REGISTRY}/${APP_NAME//\"}" --force-upload --no-confirm-changeset
+            sam deploy --stack-name ${TEMPLATE_LAMBDA} --capabilities "CAPABILITY_NAMED_IAM" --parameter-overrides Project="${TEMPLATE_LAMBDA}" Stage=${stage} --s3-bucket ${BUCKET//\"} --s3-prefix ${PREFIX_LAMBDA} --region "${region}" --image-repository "${DOCKER_REGISTRY}/${APP_NAME//\"}" --force-upload --no-confirm-changeset
             ;;
         \?)
             echo "Usage: pipeline.sh [-s] <stage> [-r] [-d] <path>"

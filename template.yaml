@@ -40,7 +40,7 @@ Resources:
             Method: post
     Metadata:
       Dockerfile: Dockerfile
-      DockerContext: !Sub '{DockerPath}'
+      DockerContext: !Sub '${DockerPath}'
       DockerTag: 'latest'
     Tags: 
       version: !Ref Version
