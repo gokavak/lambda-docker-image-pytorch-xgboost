@@ -51,11 +51,11 @@ where `<stage>` refers to the development stage (i.e. `dev`, `stage`, `prod`).
 
 ___
 
-### 2. Pushing the Docker Image to ECR Registry
+### 2. Deploying the Pytorch Model
 
 > **TL: DR** \
 > On your terminal run 
->>> `bash pipeline.sh -s <stage> -p ./pytorch-example`
+>>> `bash pipeline.sh -s <stage> -d ./pytorch-example`
 
 #### 2.A The Dockerfile
  
@@ -69,12 +69,12 @@ This base image must implement the Lambda Runtime API `awslambdaric`, the [docs]
 
 The pretrained model ([Mobilenet V2](https://pytorch.org/hub/pytorch_vision_mobilenet_v2/)) is loaded from the `function` directory of the container. Optionally you can use [boto3](https://boto3.amazonaws.com/v1/documentation/api/1.9.42/guide/s3-example-download-file.html) to retrieve the model from an `S3` bucket.
 
-#### 2.C The `push` step
+#### 2.C The `deployment` step
 
-Run the `push` step as follows
+Run the `deploy` step as follows
 
 ```shell
-bash pipeline.sh -s <stage> -p <path>
+bash pipeline.sh -s <stage> -d <path>
 ```
 
 where the `<path>` argument (defaults to current paht) refers to the directory where the `Dockerfile` and the `app` is located
@@ -82,29 +82,12 @@ where the `<path>` argument (defaults to current paht) refers to the directory w
 For instance,
  
 ```shell
-bash pipeline.sh -s dev -p ./pytorch-example
+bash pipeline.sh -s dev -d ./pytorch-example
 ```
 
 
-> **Note**: This will fail if you have not already run the `-r` flag in the `pipeline.sh`. Alternatively you can run them together: `bash pipeline.sh -s <stage> -r -p <path>`
+> **Note **: This will fail if you have not already run the `-r` flag in the `pipeline.sh`. Alternatively you can run them together: `bash pipeline.sh -s <stage> -r -d <path>`
 
-___
-
-### 3. Provision a Serverless Lambda Function
-
-Launch the deployment step
-
-```shell
-bash pipeline.sh -s <stage> -d
-```
-
-For instance, 
-
-```shell
-bash pipeline.sh -s dev -d
-```
-
-> **Note**: If you have not previous run any step, execute `bash pipeline.sh -s <stage> -r -p <path> -d`
 ___
 
 ### 4. Get Predictions
@@ -161,7 +144,7 @@ export PREFIX_LAMBDA="sam_templates/xgboost-lambda-example"
 and run 
 
 ```shell
-bash pipeline.sh -s <stage> -r -p ./xgboost-example -d
+bash pipeline.sh -s <stage> -r -d ./xgboost-example
 ```
 
 where `<stage>` refers to the development stage (i.e. `dev`, `stage`, `prod`). If you want to run each step at a time, refer to the Pytorch example for an explanation of each step.
